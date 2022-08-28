@@ -1,11 +1,13 @@
 buildscript {
     ext {
+		
 		spring_doc_openapi_version = '1.6.9'
+		mysql_connector_version = '8.0.25'
         google_guava_version = '31.1-jre'
         springboot_version = '2.6.7'
         swagger_version = '2.2.0'
 		elsql_version = '1.2'
-		
+
 		hydro_common_microservice = '1.3.11'
     }
 }
@@ -40,6 +42,8 @@ dependencies {
 	implementation "io.swagger.core.v3:swagger-annotations:${swagger_version}"
 	implementation "org.springdoc:springdoc-openapi-ui:${spring_doc_openapi_version}"
 	implementation "com.github.hydroponics-system:hydro-common-microservice:v${hydro_common_microservice}"
+
+	runtimeOnly "mysql:mysql-connector-java:${mysql_connector_version}"
 
 	testImplementation "org.springframework.boot:spring-boot-starter-test"
 }
