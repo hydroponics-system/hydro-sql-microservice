@@ -2,8 +2,6 @@ package com.hydro.sql.local.dao;
 
 import javax.sql.DataSource;
 
-import org.springframework.stereotype.Repository;
-
 import com.hydro.sql.abstracts.BaseDao;
 
 /**
@@ -12,7 +10,6 @@ import com.hydro.sql.abstracts.BaseDao;
  * @author Sam Butler
  * @since May 29, 2022
  */
-@Repository
 public class LocalInstanceBuilderDAO extends BaseDao {
 
     public LocalInstanceBuilderDAO(DataSource source) {

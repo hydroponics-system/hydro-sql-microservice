@@ -11,7 +11,6 @@ import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import org.springframework.stereotype.Component;
 
 import com.hydro.sql.builder.DatabaseConnectionBuilder;
 import com.hydro.sql.local.dao.LocalInstanceBuilderDAO;
@@ -24,7 +23,6 @@ import com.hydro.sql.local.dao.LocalInstanceBuilderDAO;
  * @author Sam Butler
  * @since May 29, 2022
  */
-@Component
 public class LocalInstanceBuilder {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LocalInstanceBuilder.class);
