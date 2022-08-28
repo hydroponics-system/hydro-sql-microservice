@@ -19,6 +19,7 @@ plugins {
 }
 
 group = 'com.hydro.sql'
+sourceSets.test.resources.srcDir "src/test/resources"
 
 repositories {
 	mavenCentral()
@@ -48,8 +49,11 @@ dependencies {
 	testImplementation "org.springframework.boot:spring-boot-starter-test"
 }
 
-jar {
-   archiveClassifier = ''
+bootJar {
+   enabled = false
 }
 
-sourceSets.test.resources.srcDir "src/test/resources"
+jar {
+   enabled = true
+   archiveClassifier = ''
+}
