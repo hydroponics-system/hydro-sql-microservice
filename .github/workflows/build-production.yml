@@ -1,10 +1,11 @@
-# This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
-# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
+# Build sql microservice on push to master and pull request from master branch.
 
 name: Build Production
 
 on:
   push:
+    branches: [master]
+  pull_request:
     branches: [master]
 
 permissions:
@@ -28,13 +29,6 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x ./gradlew
       - name: Run Build
-        env:
-          APP_ENVIRONMENT: ${{ secrets.APP_ENVIRONMENT }}
-          MYSQL_TEST_USERNAME: ${{ secrets.MYSQL_TEST_USERNAME }}
-          MYSQL_TEST_PASSWORD: ${{ secrets.MYSQL_TEST_PASSWORD }}
-          MYSQL_TEST_URL: ${{ secrets.MYSQL_TEST_URL }}
-          JWT_SIGNING_KEY: ${{ secrets.JWT_SIGNING_KEY }}
-          SYSTEM_REGISTRATION_KEY: ${{ secrets.SYSTEM_REGISTRATION_KEY }}
         uses: gradle/gradle-build-action@0d13054264b0bb894ded474f08ebb30921341cee
         with:
           arguments: build
