@@ -6,4 +6,4 @@ package com.hydro;
  * @author Sam Butler
  * @since August 27, 2022
  */
-public class HydroSqlSetup {}
+public class HydroSqlLibrary {}

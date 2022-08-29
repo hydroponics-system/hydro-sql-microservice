@@ -1,6 +1,6 @@
 package com.hydro.sql.builder;
 
-import static com.hydro.common.datetime.DateTimeMapper.printDate;
+import static com.hydro.common.datetime.DateTimeMapper.*;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
