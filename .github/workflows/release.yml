@@ -1,7 +1,10 @@
-name: Release Version
+# Will Release sql microservice to be built and packaged. This will only get run when merging to master and if the build passes.
+
+name: Release Library
+
 on:
   workflow_run:
-    workflows: ["Build Production"]
+    workflows: ["SQL Library Build"]
     types: [completed]
     branches: [master]
 

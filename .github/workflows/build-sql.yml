@@ -1,6 +1,6 @@
 # Build sql microservice on push to master and pull request from master branch.
 
-name: Build Production
+name: SQL Library Build
 
 on:
   push:
