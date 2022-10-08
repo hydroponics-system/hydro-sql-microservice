@@ -1,7 +1,11 @@
 package com.hydro.sql.abstracts;
 
 import java.util.List;
+import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -21,7 +25,7 @@ import com.opengamma.elsql.ElSqlConfig;
  */
 @Service
 public abstract class AbstractSqlDao extends AbstractSqlGlobals {
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractSqlDao.class);
     private final NamedParameterJdbcTemplate template;
     private final ElSqlBundle bundle;
 
@@ -60,6 +64,19 @@ public abstract class AbstractSqlDao extends AbstractSqlGlobals {
 
     /**
      * Does a get on the database for a single record. It will return the top most
+     * record if multiple rows are returned.
+     * 
+     * @param <T>    The object type of the method to cast the rows too.
+     * @param sql    The sql to run against the database.
+     * @param mapper The mapper to return the data as.
+     * @return Object of the returned data.
+     */
+    protected <T> T get(String sql, RowMapper<T> mapper) {
+        return get(sql, new MapSqlParameterSource(), mapper);
+    }
+
+    /**
+     * Does a get on the database for a single record. It will return the top most
      * record if multiple rows are returned. It will return the type of the passed
      * in class.
      * 
@@ -75,19 +92,6 @@ public abstract class AbstractSqlDao extends AbstractSqlGlobals {
 
     /**
      * Does a get on the database for a single record. It will return the top most
-     * record if multiple rows are returned.
-     * 
-     * @param <T>    The object type of the method to cast the rows too.
-     * @param sql    The sql to run against the database.
-     * @param mapper The mapper to return the data as.
-     * @return Object of the returned data.
-     */
-    protected <T> T get(String sql, RowMapper<T> mapper) {
-        return getTemplate().queryForObject(sql, new MapSqlParameterSource(), mapper);
-    }
-
-    /**
-     * Does a get on the database for a single record. It will return the top most
      * record if multiple rows are returned. It will return the type of the passed
      * in class.
      * 
@@ -97,7 +101,73 @@ public abstract class AbstractSqlDao extends AbstractSqlGlobals {
      * @return Object of the returned data.
      */
     protected <T> T get(String sql, Class<T> clazz) {
-        return getTemplate().queryForObject(sql, new MapSqlParameterSource(), clazz);
+        return get(sql, new MapSqlParameterSource(), clazz);
+    }
+
+    /**
+     * Wraps the get query in an optional. If the result set returns an empty data,
+     * it will log a warning and return an empty optional object.
+     * 
+     * @param <T>    The object type of the method to cast the rows too.
+     * @param sql    The sql to run against the database.
+     * @param params Params to be inserted into the query.
+     * @param mapper The mapper to return the data as.
+     * @return Object of the returned data.
+     */
+    protected <T> Optional<T> getForOptional(String sql, MapSqlParameterSource params, RowMapper<T> mapper) {
+        try {
+            return Optional.of(get(sql, params, mapper));
+        }
+        catch(EmptyResultDataAccessException e) {
+            LOGGER.warn("Query returned empty result");
+            return Optional.empty();
+        }
+    }
+
+    /**
+     * Wraps the get query in an optional. If the result set returns an empty data,
+     * it will log a warning and return an empty optional object.
+     * 
+     * @param <T>    The object type of the method to cast the rows too.
+     * @param sql    The sql to run against the database.
+     * @param mapper The mapper to return the data as.
+     * @return Object of the returned data.
+     */
+    protected <T> Optional<T> getForOptional(String sql, RowMapper<T> mapper) {
+        return getForOptional(sql, mapper);
+    }
+
+    /**
+     * Wraps the get query in an optional. If the result set returns an empty data,
+     * it will log a warning and return an empty optional object.
+     * 
+     * @param <T>    The object type of the method to cast the rows too.
+     * @param sql    The sql to run against the database.
+     * @param params Params to be inserted into the query.
+     * @param clazz  The class to map the data as.
+     * @return Object of the returned data.
+     */
+    protected <T> Optional<T> getForOptional(String sql, MapSqlParameterSource params, Class<T> clazz) {
+        try {
+            return Optional.of(get(sql, params, clazz));
+        }
+        catch(EmptyResultDataAccessException e) {
+            LOGGER.warn("Query returned empty result");
+            return Optional.empty();
+        }
+    }
+
+    /**
+     * Wraps the get query in an optional. If the result set returns an empty data,
+     * it will log a warning and return an empty optional object.
+     * 
+     * @param <T>   The object type of the method to cast the rows too.
+     * @param sql   The sql to run against the database.
+     * @param clazz The class to map the data as.
+     * @return Object of the returned data.
+     */
+    protected <T> Optional<T> getForOptional(String sql, Class<T> clazz) {
+        return getForOptional(sql, clazz);
     }
 
     /**

@@ -21,22 +21,32 @@ import com.hydro.common.dictionary.enums.TextEnum;
 public class SqlParamBuilder {
     private MapSqlParameterSource sqlParams;
 
+    /**
+     * Private Constructor for static class to initilize its components.
+     * 
+     * @param sqlParams The params to be set.
+     */
     private SqlParamBuilder(MapSqlParameterSource sqlParams) {
-        if(sqlParams == null) {
-            this.sqlParams = new MapSqlParameterSource();
-        }
-        else {
-            this.sqlParams = sqlParams;
-        }
+        this.sqlParams = sqlParams == null ? new MapSqlParameterSource() : sqlParams;
     }
 
     /**
-     * Initialize the {@link SqlParamBuilder}.
+     * Initialize the {@link SqlParamBuilder} with an empty param set.
      * 
      * @return {@link SqlParamBuilder} for an empty object.
      */
     public static SqlParamBuilder with() {
         return new SqlParamBuilder(null);
+    }
+
+    /**
+     * Initialize the {@link SqlParamBuilder} with the give sql params.
+     * 
+     * @param sqlParams The sql params to be set.
+     * @return {@link SqlParamBuilder} for an empty object.
+     */
+    public static SqlParamBuilder with(MapSqlParameterSource sqlParams) {
+        return new SqlParamBuilder(sqlParams);
     }
 
     /**
@@ -59,7 +69,7 @@ public class SqlParamBuilder {
      * @param value The value of the parameter
      * @return this builder object {@link SqlParamBuilder}
      */
-    public SqlParamBuilder withParam(String name, TextEnum value) throws Exception {
+    public SqlParamBuilder withParam(String name, TextEnum value) {
         return withParam(name, value == null ? null : value.getTextId());
     }
 
